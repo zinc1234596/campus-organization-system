@@ -30,3 +30,5 @@ gen
 /installer/doc
 /installer/deps
 
+/dist
+
