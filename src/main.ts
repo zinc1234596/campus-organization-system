@@ -3,8 +3,14 @@ import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
+declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // HMR热重载
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
   // 修改全局路由前缀
   app.setGlobalPrefix('ucs');
   // 统一响应体格式
