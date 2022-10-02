@@ -12,7 +12,7 @@ export class UserController {
     summary: '新增用户',
   })
   @Post('/add')
-  create(@Body() user: AddUserDto) {
+  async create(@Body() user: AddUserDto) {
     return this.userService.createOrSave(user);
   }
 }

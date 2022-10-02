@@ -28,6 +28,7 @@
     "@nestjs/swagger": "^6.1.2",
     "class-validator": "^0.13.2",
     "cross-env": "^7.0.3",
+    "ioredis": "^5.2.3",
     "mongoose": "^6.6.1",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
