@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AddUserDto } from '@/user/user.dto';
 
 @ApiTags('user')
@@ -11,6 +11,7 @@ export class UserController {
   @ApiOperation({
     summary: '新增用户',
   })
+  @ApiBearerAuth()
   @Post('/addUser')
   async create(@Body() user: AddUserDto) {
     return this.userService.createOrSave(user);

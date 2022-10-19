@@ -16,8 +16,8 @@ import { JwtAuthGuard } from '@/common/guards/auth.guard';
       isGlobal: true,
       load: [getConfig],
     }),
-    UserModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [
