@@ -1,6 +1,6 @@
 // 处理业务运行中预知且主动抛出的异常
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { BUSINESS_ERROR_CODE } from './business.error.codes';
+import { BUSINESS_ERROR_CODE } from '@/common/constants/business.error.codes.constants';
 
 type BusinessError = {
   code: number;
@@ -20,7 +20,14 @@ export class BusinessException extends HttpException {
   static throwForbidden() {
     throw new BusinessException({
       code: BUSINESS_ERROR_CODE.ACCESS_FORBIDDEN,
-      message: '抱歉哦，您无此权限！',
+      message: '无此权限！',
+    });
+  }
+
+  static throwUserOrPasswordError() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.USERNAME_OR_PASSWORD_ERROR,
+      message: '账号或密码错误',
     });
   }
 }

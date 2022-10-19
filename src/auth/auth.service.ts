@@ -33,6 +33,7 @@ export class AuthService {
   async login(user: User) {
     const { id, username } = user;
     return {
+      // 签发token（根据username, id）
       token: this.jwtService.sign({ username, id }),
     };
   }

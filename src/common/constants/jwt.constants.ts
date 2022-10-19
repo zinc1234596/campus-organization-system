@@ -1,3 +1,3 @@
-export const jwtConstants = {
-  secret: 'NestJwtConstants',
+export const JWT_CONSTANTS = {
+  SECRET: 'NestJwtConstants',
 };

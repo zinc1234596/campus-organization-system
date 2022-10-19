@@ -13,7 +13,7 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
   // 修改全局路由前缀
-  app.setGlobalPrefix('ucs');
+  app.setGlobalPrefix('api');
   // 统一响应体格式
   app.useGlobalInterceptors(new TransformInterceptor());
   // 全局异常过滤器
