@@ -11,7 +11,7 @@ export class UserController {
   @ApiOperation({
     summary: '新增用户',
   })
-  @Post('/add')
+  @Post('/addUser')
   async create(@Body() user: AddUserDto) {
     return this.userService.createOrSave(user);
   }

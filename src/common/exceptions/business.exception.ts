@@ -27,7 +27,14 @@ export class BusinessException extends HttpException {
   static throwUserOrPasswordError() {
     throw new BusinessException({
       code: BUSINESS_ERROR_CODE.USERNAME_OR_PASSWORD_ERROR,
-      message: '账号或密码错误',
+      message: '用户名或密码错误',
+    });
+  }
+
+  static throwUsernameAlreadyExistError() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.USERNAME_ALREADY_EXIST,
+      message: '用户名已经存在',
     });
   }
 }
