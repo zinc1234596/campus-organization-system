@@ -3,12 +3,14 @@ import { UserService } from './user.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AddUserDto } from '@/user/user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Public } from "@/decorator/public.decorator";
 
 @ApiTags('用户')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @ApiOperation({
     summary: '新增用户',
   })
