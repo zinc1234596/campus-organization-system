@@ -23,7 +23,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       response.status(HttpStatus.OK).send({
         data: null,
         status: error['code'],
-        extra: {},
         message: error['message'],
         success: false,
       });

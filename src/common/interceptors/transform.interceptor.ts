@@ -26,7 +26,6 @@ export class TransformInterceptor<T>
       map((data) => ({
         data, // 数据
         status: 0, // 接口状态值
-        extra: {}, // 拓展信息
         message: 'success', // 异常信息
         success: true, // 接口业务返回状态
       })),
