@@ -15,4 +15,12 @@ export class UserController {
   async create(@Body() user: AddUserDto) {
     return this.userService.createOrSave(user);
   }
+
+  @ApiOperation({
+    summary: '新增用户ttt',
+  })
+  @Post('/abc')
+  async abc() {
+    return this.userService.addUser();
+  }
 }
