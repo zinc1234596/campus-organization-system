@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AddUserDto } from '@/user/user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('用户')
 @Controller('user')
@@ -22,5 +23,14 @@ export class UserController {
   @Post('/abc')
   async abc() {
     return this.userService.addUser();
+  }
+
+  @ApiOperation({
+    summary: '验证token',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/token')
+  async token() {
+    return 123;
   }
 }
