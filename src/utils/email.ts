@@ -1,5 +1,6 @@
 import * as nodemailer from 'nodemailer';
 import { getConfig } from '@/utils/index';
+import { RedisInstance } from '@/common/redis';
 const { EMAIL_CONFIG } = getConfig();
 /**
  * 生成验证码
@@ -26,6 +27,8 @@ const verifyRegEmail = (email: string) => {
  * @param email
  */
 export const sendVerifyCodeEmail = async (email: string) => {
+  const code = randomCode();
+  console.log(code);
   if (!verifyRegEmail(email)) {
     return '邮箱格式不对';
   }
@@ -36,8 +39,14 @@ export const sendVerifyCodeEmail = async (email: string) => {
     from: EMAIL_CONFIG.auth.user,
     to: `${email}`,
     subject: '你的验证码来了',
-    html: `${randomCode()}`,
+    html: `${code}`,
   };
-  const res = await transporter.sendMail(mailOptions);
-  return res.response;
+  try {
+    const res = await transporter.sendMail(mailOptions);
+    const redisCache = await RedisInstance.initRedis();
+    await redisCache.setex(email, 180, code);
+    return res.response;
+  } catch (err) {
+    return err;
+  }
 };
