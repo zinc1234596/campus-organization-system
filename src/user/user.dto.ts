@@ -8,4 +8,8 @@ export class AddUserDto {
   @ApiProperty({ example: '123456' })
   @IsNotEmpty()
   password: string;
+
+  @ApiProperty({ example: 'xxx@mail.com' })
+  @IsNotEmpty()
+  email: string;
 }

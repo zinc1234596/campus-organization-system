@@ -19,3 +19,10 @@ REDIS_CONFIG:
   port: 6379         # redis 端口
 #  auth: "xxxx"       # redis 连接密码
   db: 1              # redis 数据库
+EMAIL_CONFIG:
+  service: "qq"
+  port: 465
+  secureConnection: true
+  auth:
+    user: 'ryan.jiang@foxmail.com'
+    pass: 'cwblxgtienytdecd'
