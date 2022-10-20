@@ -24,17 +24,24 @@ export class BusinessException extends HttpException {
     });
   }
 
-  static throwUserOrPasswordError() {
+  static throwEmailOrPasswordError() {
     throw new BusinessException({
-      code: BUSINESS_ERROR_CODE.USERNAME_OR_PASSWORD_ERROR,
-      message: '用户名或密码错误',
+      code: BUSINESS_ERROR_CODE.EMAIL_OR_PASSWORD_ERROR,
+      message: '邮箱或密码错误',
     });
   }
 
-  static throwUsernameAlreadyExistError() {
+  static throwEmailAlreadyExistError() {
     throw new BusinessException({
-      code: BUSINESS_ERROR_CODE.USERNAME_ALREADY_EXIST,
-      message: '用户名已经存在',
+      code: BUSINESS_ERROR_CODE.EMAIL_ALREADY_EXIST,
+      message: '邮箱已经存在',
+    });
+  }
+
+  static throwEmailCodeError() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.EMAIL_CODE_ERROR,
+      message: '验证码错误',
     });
   }
 }

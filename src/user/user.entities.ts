@@ -5,9 +5,6 @@ export class User {
   @ObjectIdColumn()
   id: number;
 
-  @Column({ length: 18, unique: true })
-  username: string;
-
   @Column()
   password: string;
 
