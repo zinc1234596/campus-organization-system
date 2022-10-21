@@ -44,4 +44,11 @@ export class BusinessException extends HttpException {
       message: '验证码错误',
     });
   }
+
+  static throwEmailVerifyCodeAlreadySend() {
+    throw new BusinessException({
+      code: BUSINESS_ERROR_CODE.EMAIL_VERIFY_CODE_ALREADY_SEND,
+      message: '验证码已经发送',
+    });
+  }
 }

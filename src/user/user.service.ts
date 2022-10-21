@@ -19,8 +19,7 @@ export class UserService {
    */
   async registered(body) {
     const { email, password, verifyCode } = body;
-    const redisCache = await RedisInstance.initRedis();
-    const redisVerifyCode = await redisCache.get(email);
+    const redisVerifyCode = await this._ifRedisHasEmailVerifyCode(email);
     if (redisVerifyCode && redisVerifyCode === verifyCode) {
       const existUser = await this._findUser(email);
       if (!existUser) {
@@ -32,11 +31,17 @@ export class UserService {
   }
 
   /**
-   * 处理邮箱验证码
+   * 处理邮箱验证码 Controller
    * @param email
    */
   async handelVerifyCodeEmail(email: string) {
     await this._findUser(email);
+    const ifRedisHasEmailVerifyCode = await this._ifRedisHasEmailVerifyCode(
+      email,
+    );
+    if (ifRedisHasEmailVerifyCode) {
+      BusinessException.throwEmailVerifyCodeAlreadySend();
+    }
     const { res, code } = await sendVerifyCodeEmail(email);
     const redisCache = await RedisInstance.initRedis();
     await redisCache.setex(email, 180, code);
@@ -70,5 +75,14 @@ export class UserService {
     } else {
       BusinessException.throwEmailAlreadyExistError();
     }
+  }
+
+  /**
+   * 判断Redis是否存在邮件验证码
+   * @param email
+   */
+  async _ifRedisHasEmailVerifyCode(email: string): Promise<string | null> {
+    const redisCache = await RedisInstance.initRedis();
+    return redisCache.get(email);
   }
 }
