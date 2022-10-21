@@ -5,7 +5,7 @@ export class AddUserDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({ example: '123456' })
+  @ApiProperty({ example: '123' })
   @IsNotEmpty()
   password: string;
 }
