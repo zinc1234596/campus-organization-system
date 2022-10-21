@@ -1,8 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AddUserDto } from '@/user/user.dto';
-import { sendVerifyCodeEmail } from '@/utils/email';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '@/decorator/public.decorator';
 
 @ApiTags('user')
@@ -10,26 +8,27 @@ import { Public } from '@/decorator/public.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @ApiOperation({
-  //   summary: '新增用户',
-  // })
-  // @ApiBearerAuth()
-  // @Post('/addUser')
-  // async create(@Body() user: AddUserDto) {
-  //   return this.userService.createOrSave(user);
-  // }
-
   @ApiOperation({
     summary: '获取邮箱验证码',
   })
   @Public()
   @Get('/getCode')
   async getEmailCode(@Query('email') email: string) {
-    return await sendVerifyCodeEmail(email);
+    return await this.userService.handelVerifyCodeEmail(email);
   }
 
   @ApiOperation({
     summary: '注册',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', example: 'xxx@mail.com' },
+        password: { type: 'string', example: 'Abc123456!!?' },
+        verifyCode: { type: 'string', example: '001122' },
+      },
+    },
   })
   @Public()
   @Post('/registered')

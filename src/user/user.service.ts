@@ -4,6 +4,7 @@ import { MongoRepository } from 'typeorm';
 import { BusinessException } from '@/common/exceptions/business.exception';
 import { RedisInstance } from '@/common/redis';
 import { AddUserDto } from '@/user/user.dto';
+import { sendVerifyCodeEmail } from '@/utils/email';
 
 @Injectable()
 export class UserService {
@@ -12,14 +13,40 @@ export class UserService {
     private userRepository: MongoRepository<User>,
   ) {}
 
-  // async createOrSave(user) {
-  //   try {
-  //     const res = await this.userRepository.save(user);
-  //     return res;
-  //   } catch (e) {
-  //     BusinessException.throwEmailAlreadyExistError();
-  //   }
-  // }
+  /**
+   *  注册用户集合逻辑
+   * @param body
+   */
+  async registered(body) {
+    const { email, password, verifyCode } = body;
+    const redisCache = await RedisInstance.initRedis();
+    const redisVerifyCode = await redisCache.get(email);
+    if (redisVerifyCode && redisVerifyCode === verifyCode) {
+      const existUser = await this._findUser(email);
+      if (!existUser) {
+        return await this._createUser({ password, email });
+      }
+    } else {
+      BusinessException.throwEmailCodeError();
+    }
+  }
+
+  /**
+   * 处理邮箱验证码
+   * @param email
+   */
+  async handelVerifyCodeEmail(email: string) {
+    await this._findUser(email);
+    const { res, code } = await sendVerifyCodeEmail(email);
+    const redisCache = await RedisInstance.initRedis();
+    await redisCache.setex(email, 180, code);
+    return res;
+  }
+
+  /**
+   * 往DB创建用户
+   * @param user
+   */
   async _createUser(user: AddUserDto) {
     const res = await this.userRepository.save(user);
     return res.email;
@@ -31,40 +58,17 @@ export class UserService {
     if (user) return user;
     else return null;
   }
+
   /**
-   * find user by username
-   * @param username
+   * 查看DB是否存在该用户(通过email查询)
+   * @param email
    */
   async _findUser(email: string): Promise<User> {
     const user = await this.userRepository.findOneBy({ email });
-    console.log(user);
     if (!user) {
       return user;
     } else {
       BusinessException.throwEmailAlreadyExistError();
-    }
-  }
-  // async addUser() {
-  //   const aaa = await this.userRepository.save({
-  //     username: 'admin',
-  //     password: '123456',
-  //   });
-  //   if (aaa) {
-  //     return true;
-  //   }
-  // }
-  async registered(body) {
-    const { password, email, verifyCode } = body;
-    const redisCache = await RedisInstance.initRedis();
-    const redisVerifyCode = await redisCache.get(email);
-    if (redisVerifyCode && redisVerifyCode === verifyCode) {
-      const existUser = await this._findUser(email);
-      if (!existUser) {
-        console.log(11);
-        return await this._createUser({ password, email });
-      }
-    } else {
-      BusinessException.throwEmailCodeError();
     }
   }
 }

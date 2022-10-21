@@ -43,9 +43,7 @@ export const sendVerifyCodeEmail = async (email: string) => {
   };
   try {
     const res = await transporter.sendMail(mailOptions);
-    const redisCache = await RedisInstance.initRedis();
-    await redisCache.setex(email, 180, code);
-    return res.response;
+    return { res: res.response, code };
   } catch (err) {
     return err;
   }
