@@ -18,7 +18,6 @@ export class AuthService {
    * @param password
    */
   async validate(email: string, password: string): Promise<User> {
-    console.log(122);
     const user = await this.userService.find(email);
     // 注：实际中的密码处理应通过加密措施
     if (user && user.password === password) {
@@ -32,7 +31,6 @@ export class AuthService {
    * @param user
    */
   async login(user: User) {
-    console.log(12);
     const { id, email } = user;
     return {
       // 签发token（根据username, id）
